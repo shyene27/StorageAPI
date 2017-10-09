@@ -19,11 +19,13 @@ import md.sergiu.util.*;
 
 @Path ("/v1/inventory")
 public class V1_inventory {
-	@Path ("/{type}/{manufactor}")
+	
+	@Path ("/{product_name}/{manufactor}")
 	@GET
 	@Produces (MediaType.APPLICATION_JSON)
+	
 	public Response returnSpecificItemType(
-			@PathParam("type") String product_name,
+			@PathParam("product_name") String product_name,
 			@PathParam("manufactor") String manufactor) throws Exception {
 		
 		PreparedStatement query = null;
@@ -32,15 +34,19 @@ public class V1_inventory {
 		Response rb = null;
 		
 		try {
+			
+			
 			datasource connect = new datasource();
 			conn = connect.datasource();
 			
-			query = conn.prepareStatement("Select product_id,product_name,manufactor,model,product_price FROM products"+
-			"where product_name= ?"+
-			"and manufactor = ?");
+			query = conn.prepareStatement("Select product_id,product_name,manufactor,model,product_price "
+					+ "FROM products "
+					+ "where product_name = ? "
+					+ "and manufactor = ?" );
 			
 			query.setString(1, product_name);
 			query.setString(2, manufactor);
+			
 			ResultSet rs = query.executeQuery();
 			 
 			
