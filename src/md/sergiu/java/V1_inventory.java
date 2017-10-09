@@ -17,12 +17,14 @@ import org.codehaus.jettison.json.JSONArray;
 import md.sergiu.db.*;
 import md.sergiu.util.*;
 
-@Path ("/v1/inventory/")
+@Path ("/v1/inventory")
 public class V1_inventory {
-	
+	@Path ("/{type}/{manufactor}")
 	@GET
 	@Produces (MediaType.APPLICATION_JSON)
-	public Response returnAllclients() throws Exception {
+	public Response returnSpecificItemType(
+			@PathParam("type") String product_name,
+			@PathParam("manufactor") String manufactor) throws Exception {
 		
 		PreparedStatement query = null;
 		Connection conn = null; 
@@ -33,12 +35,18 @@ public class V1_inventory {
 			datasource connect = new datasource();
 			conn = connect.datasource();
 			
-			query = conn.prepareStatement("Select * FROM customers");
+			query = conn.prepareStatement("Select product_id,product_name,manufactor,model,product_price FROM products"+
+			"where product_name= ?"+
+			"and manufactor = ?");
 			
+			query.setString(1, product_name);
+			query.setString(2, manufactor);
 			ResultSet rs = query.executeQuery();
 			 
+			
 			ToJSON converter = new ToJSON();
 			JSONArray json = new JSONArray();
+			
 			
 			json = converter.toJSONArray(rs);
 			query.close(); //close connection
