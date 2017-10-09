@@ -19,17 +19,18 @@ import md.sergiu.util.*;
 
 @Path ("/v1/inventory")
 public class V1_inventory {
-/*
- * http://localhost:8080/StorageAPI/api/v1/inventory?product_name=hdd&manufactor=UHD
- * 
- */
 	
+/*
+ * http://localhost:8080/StorageAPI/api/v1/inventory/hdd/UHD
+ * 
+ */	
+	@Path ("/{product_name}/{manufactor}")
 	@GET
 	@Produces (MediaType.APPLICATION_JSON)
 	
 	public Response returnSpecificItemType(
-			@QueryParam("product_name") String product_name,
-			@QueryParam("manufactor") String manufactor) throws Exception {
+			@PathParam("product_name") String product_name,
+			@PathParam("manufactor") String manufactor) throws Exception {
 		
 		PreparedStatement query = null;
 		Connection conn = null; 
