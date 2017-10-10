@@ -39,7 +39,7 @@ public class V1_inventory {
 		
 		try {
 			
-			
+		
 			datasource connect = new datasource();
 			conn = connect.datasource();
 			
