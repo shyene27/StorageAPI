@@ -21,16 +21,16 @@ import md.sergiu.util.*;
 public class V1_inventory {
 	
 /*
- * http://localhost:8080/StorageAPI/api/v1/inventory/hdd/UHD
+ * http://localhost:8080/StorageAPI/api/v1/inventory/3/1520
  * 
  */	
-	@Path ("/{product_name}/{manufactor}")
+	@Path ("/{prod_qty}/{total_price}")
 	@GET
 	@Produces (MediaType.APPLICATION_JSON)
 	
 	public Response returnSpecificItemType(
-			@PathParam("product_name") String product_name,
-			@PathParam("manufactor") String manufactor) throws Exception {
+			@PathParam("prod_qty") String prod_qty,
+			@PathParam("total_price") String total_price) throws Exception {
 		
 		PreparedStatement query = null;
 		Connection conn = null; 
@@ -43,13 +43,13 @@ public class V1_inventory {
 			datasource connect = new datasource();
 			conn = connect.datasource();
 			
-			query = conn.prepareStatement("Select product_id,product_name,manufactor,model,product_price "
-					+ "FROM products "
-					+ "where product_name = ? "
-					+ "and manufactor = ?" );
+			query = conn.prepareStatement("Select * "
+					+ "FROM orders "
+					+ "where prod_qty = ? "
+					+ "and total_price = ?" );
 			
-			query.setString(1, product_name);
-			query.setString(2, manufactor);
+			query.setString(1, prod_qty);
+			query.setString(2, total_price);
 			
 			ResultSet rs = query.executeQuery();
 			 
@@ -73,6 +73,54 @@ public class V1_inventory {
 		}
 	return rb;
 	}
+
+	
+	//both below methods are for put function
+	
+		
+	
+	
+	@GET
+	@Produces (MediaType.APPLICATION_JSON)
+	
+	public Response returnAllOrders() throws Exception {
+		
+		PreparedStatement query = null;
+		Connection conn = null; 
+		String returnString = null;
+		Response rb = null;
+		
+		try {
+			
+		
+			datasource connect = new datasource();
+			conn = connect.datasource();
+			
+			query = conn.prepareStatement("Select * FROM orders");
+			
+					
+			ResultSet rs = query.executeQuery();
+			 
+			
+			ToJSON converter = new ToJSON();
+			JSONArray json = new JSONArray();
+			
+			
+			json = converter.toJSONArray(rs);
+			query.close(); //close connection
+			
+			returnString = json.toString();
+			rb = Response.ok(returnString).build();
+			
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			if (conn != null) conn.close();
+		}
+	return rb;
+	}	
 	
 	
 

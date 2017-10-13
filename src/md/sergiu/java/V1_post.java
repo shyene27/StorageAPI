@@ -12,10 +12,8 @@ import javax.ws.rs.core.Response;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 
-import com.mysql.jdbc.PreparedStatement;
 
 import md.sergiu.db.*;
-import md.sergiu.util.*;
 
 @Path("/v1/post")
 public class V1_post {
@@ -75,7 +73,7 @@ public Response addOrders(String incomingData) throws Exception {
 				 * The second parameter is the Value
 				 */
 				jsonObject.put("HTTP_CODE", "200");
-				jsonObject.put("MSG", "Item has been entered successfully, Version 3");
+				jsonObject.put("MSG", "Item has been entered successfully");
 				/*
 				 * When you are dealing with JSONArrays, the put method is used to add
 				 * JSONObjects into JSONArray.
@@ -97,7 +95,7 @@ public Response addOrders(String incomingData) throws Exception {
 	
 	
 	/**
-	 * This method will insert a record into the PC_PARTS table. 
+	 * This method will prepare the query for inserting into the Orders table. 
 	 * 
 	 * @param prod_qty
 	 * @param total_price
