@@ -14,30 +14,28 @@ $(document).ready(function() {
 	
 	getInventory();
 	
-	console.log('before5');
 	
 	$(document.body).on('click', ':button, .UPDATE_BTN', function(e) {
-		console.log(this);
 		var $this = $(this)
-			, order_id = $this.val()
+			, order_id = $(this).val()
 			, $tr = $this.closest('tr')
 			, prod_qty = $tr.find('.CL_prod_qty').text()
 			, total_price = $tr.find('.CL_total_price').text()
 			, order_date = $tr.find('.CL_order_date').text()
 			, product_id = $tr.find('.CL_product_id').text()
 			, customer_id = $tr.find('.CL_customer_id').text();
-		console.log('total price'+ total_price);
-		console.log('before1');
+			
+			console.log('product_id ------ '+ product_id);
+			console.log('total_price ------ '+ total_price);
 		
 		$('#SET_order_id').val(order_id);
 		$SET_prod_qty.text(prod_qty);
-		$SET_total_price.text(total_price);
+		$SET_total_price.val(total_price);
 		$('#SET_order_date').text(order_date);
-		$('#SET_product_id').val(product_id);
+		$('#SET_product_id').text(product_id);
 		$('#SET_customer_id').text(customer_id);
-		console.log('before2');
 		$('#update_response').text("");
-		console.log('before3');
+		
 	});
 	
 	console.log('before4');
@@ -47,7 +45,7 @@ $(document).ready(function() {
 		
 		var obj = $put_example.serializeObject()
 			, prod_qty = $SET_prod_qty.text()
-			, total_price = $SET_total_price.text();
+			, total_price = $SET_total_price.val();
 		
 		updateInventory(obj, prod_qty, total_price);
 	});
@@ -68,7 +66,7 @@ function updateInventory(obj, qty, total) {
 				$('#update_response').text( data[0].MSG );
 			},
 			complete: function(XMLHttpRequest) {
-				//console.log( XMLHttpRequest.getAllResponseHeaders() );
+				console.log( XMLHttpRequest.getAllResponseHeaders() );
 				getInventory();
 			}, 
 			dataType: "json" //request JSON
@@ -122,7 +120,7 @@ function templateGetInventory(param) {
 				'<td class="CL_order_date">' + param.order_date + '</td>' +
 				'<td class="CL_product_id">' + param.product_id + '</td>' +
 				'<td class="CL_customer_id">' + param.customer_id + '</td>' +
-				'<td class="CL_orders_BTN"> <button class="UPDATE_BTN" value=" ' + param.order_id + ' " type="button">Update</button> </td>' +
+				'<td class="CL_orders_BTN"> <button class="UPDATE_BTN" value=' + param.order_id + ' type="button">Update</button> </td>' +
 			'</tr>';
 }
 

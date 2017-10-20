@@ -1,8 +1,6 @@
 package md.sergiu.java;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -13,12 +11,10 @@ import javax.ws.rs.core.Response;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.PreparedStatement;
 
 import md.sergiu.db.*;
 
-
+@Path("/v1/put")
 public class V1_put {
 
 	/**
@@ -29,17 +25,17 @@ public class V1_put {
 	 * @return
 	 * @throws Exception
 	 */
-	@Path("/v1/put/{prod_qty}/{total_price}")
+	@Path("/{prod_qty}/{total_price}")
 	@PUT
 	@Consumes({MediaType.APPLICATION_FORM_URLENCODED,MediaType.APPLICATION_JSON})
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response updateItem(@PathParam("prod_qty") String prod_qty,
+	public Response updateItem(@PathParam("prod_qty") int prod_qty,
 			@PathParam("total_price") int total_price,String incomingData) 
 								throws Exception {
 		
 		System.out.println("incomingData: " + incomingData);
-		System.out.println("brand: " + prod_qty);
-		System.out.println("item_number: " + total_price);
+		System.out.println("prod qty: " + prod_qty);
+		System.out.println("total price: " + total_price);
 		
 		int id;
 		int price;
@@ -53,7 +49,7 @@ public class V1_put {
 			JSONObject partsData = new JSONObject(incomingData); //we are using json objects to parse data
 			id = partsData.optInt("order_id", 0);
 			price = partsData.optInt("total_price", 0);
-			
+			System.out.println("id: " + id);
 			//call the correct sql method
 			http_code = updateOrder(id, price);
 			
@@ -61,14 +57,14 @@ public class V1_put {
 				jsonObject.put("HTTP_CODE", "200");
 				jsonObject.put("MSG", "Order has been updated successfully");
 			} else {
-				return Response.status(500).entity("Server was not able to process your request").build();
+				return Response.status(500).entity("Server was not able to process your request 1").build();
 			}
 			
 			returnString = jsonArray.put(jsonObject).toString();
 			
 		} catch(Exception e) {
 			e.printStackTrace();
-			return Response.status(500).entity("Server was not able to process your request").build();
+			return Response.status(500).entity("Server was not able to process your request 2").build();
 		}
 		
 		return Response.ok(returnString).build();

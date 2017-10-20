@@ -54,18 +54,22 @@ function getInventory() {
 	
 	ajaxObj = {  
 			type: "GET",
-			url: "http://localhost:7001/com.youtube.rest/api/v1/inventory", 
-			data: "ts="+n,
+			url: "http://localhost:8080/StorageAPI/api/v1/inventory/", 
+			data: "ts="+n, 
 			contentType:"application/json",
 			error: function(jqXHR, textStatus, errorThrown) {
 				console.log(jqXHR.responseText);
 			},
 			success: function(data) { 
-				//console.log(data);
+				
+				console.log('data='+data);
+				
 				var html_string = "";
 				
 				$.each(data, function(index1, val1) {
-					//console.log(val1);
+					
+					console.log('val1='+val1);
+					
 					html_string = html_string + templateGetInventory(val1);
 				});
 				
@@ -77,16 +81,19 @@ function getInventory() {
 			dataType: "json" //request JSON
 		};
 		
+	
 	return $.ajax(ajaxObj);
 }
 
 function templateGetInventory(param) {
+	console.log('templateGetInventory(param)');
 	return '<tr>' +
-				'<td class="CL_PC_PARTS_MAKER">' + param.PC_PARTS_MAKER + '</td>' +
-				'<td class="CL_PC_PARTS_CODE">' + param.PC_PARTS_CODE + '</td>' +
-				'<td class="CL_PC_PARTS_TITLE">' + param.PC_PARTS_TITLE + '</td>' +
-				'<td class="CL_PC_PARTS_AVAIL">' + param.PC_PARTS_AVAIL + '</td>' +
-				'<td class="CL_PC_PARTS_DESC">' + param.PC_PARTS_DESC + '</td>' +
-				'<td class="CL_PC_PARTS_BTN"> <button class="DELETE_BTN" value=" ' + param.PC_PARTS_PK + ' " type="button">Delete</button> </td>' +
+				'<td class="CL_prod_qty">' + param.prod_qty + '</td>' +
+				'<td class="CL_total_price">' + param.total_price + '</td>' +
+				'<td class="CL_order_date">' + param.order_date + '</td>' +
+				'<td class="CL_product_id">' + param.product_id + '</td>' +
+				'<td class="CL_customer_id">' + param.customer_id + '</td>' +
+				'<td class="CL_orders_BTN"> <button class="DELETE_BTN" value=' + param.order_id + ' type="button">Delete</button> </td>' +
 			'</tr>';
 }
+
