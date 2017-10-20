@@ -13,21 +13,19 @@ $(document).ready(function() {
 	$(document.body).on('click', ':button, .DELETE_BTN', function(e) {
 		//console.log(this);
 		var $this = $(this)
-			, PC_PARTS_PK = $this.val()
-			, obj = {PC_PARTS_PK : PC_PARTS_PK}
-			, $tr = $this.closest('tr')
-			, PC_PARTS_MAKER = $tr.find('.CL_PC_PARTS_MAKER').text()
-			, PC_PARTS_CODE = $tr.find('.CL_PC_PARTS_CODE').text();
+			, order_id = $this.val()
+			, obj = {order_id : order_id}
+			, $tr = $this.closest('tr');
 		
-		deleteInventory(obj, PC_PARTS_MAKER, PC_PARTS_CODE);
+		deleteInventory(obj);
 	});
 });
 
-function deleteInventory(obj, maker, code) {
+function deleteInventory(obj) {
 	
 	ajaxObj = {  
 			type: "DELETE",
-			url: "http://localhost:7001/com.youtube.rest/api/v3/inventory/" + maker + "/" + code,
+			url: "http://localhost:8080/StorageAPI/api/v1/delete",
 			data: JSON.stringify(obj), 
 			contentType:"application/json",
 			error: function(jqXHR, textStatus, errorThrown) {
