@@ -4,19 +4,35 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.InputStream;
+import java.util.Properties;
 
 public class datasource {
     private Statement st;
     private Connection con;
     private ResultSet rs;
+    
+    public  Connection datasource() throws Exception {
+        try   {
+        	
+        	Properties properties = new Properties();
+            InputStream reader = datasource.class.getClassLoader().getResourceAsStream("/md/sergiu/db/config");
+        	//FileInputStream reader = new FileInputStream("C:\\Users\\shyen\\eclipse-workspace\\StorageAPI\\config");
+            properties.load(reader);
 
-    public Connection datasource() throws Exception {
-        try {
             Class.forName("com.mysql.jdbc.Driver");
             String driver = "com.mysql.jdbc.Driver";
-            String url = "jdbc:mysql://localhost:3306/store";
-            String username = "root";
-            String password = "admin";
+            
+            String url = properties.getProperty("url");
+            String username = properties.getProperty("username");
+            String password = properties.getProperty("password");
+
+            
+            //String url = "jdbc:mysql://localhost:3306/store";
+            //String username = "root";
+            //String password = "admin";
             Class.forName(driver);
 
             con = DriverManager.getConnection(url, username, password);
@@ -24,7 +40,8 @@ public class datasource {
 
 
         } catch (Exception e) {
-            System.out.println(e);
+        	e.printStackTrace();
+            //System.out.println(e);
         }
         return con;
     }
