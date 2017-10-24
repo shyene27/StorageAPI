@@ -3,39 +3,60 @@
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Iterator"%>
 
-<%@page import="java.util.List"%> 
-<%@page import="org.apache.poi.ss.util.CellRangeAddress"%>
-<%@page import="org.apache.poi.hssf.usermodel.HSSFCell"%>
-<%@page import="org.apache.poi.hssf.usermodel.HSSFRow"%>
-<%@page import="org.apache.poi.hssf.usermodel.HSSFSheet"%>
-<%@page import="org.apache.poi.hssf.usermodel.HSSFWorkbook"%><%@page import="java.io.*" %>
+<%@page import="md.sergiu.db.*"%> 
 
+<%@page import="java.sql.*"%> 
+<%@page import="java.io.*" %>
 
 
 
 <% 
+String filename = "C:\\Users\\shyen\\Desktop\\orders_export1.csv";
+
+Connection conn = null; 
+String returnString = null;
+Statement stmt;
+
+try
+{
+FileWriter fw = new FileWriter(filename);
+fw.append("Order ID");
+fw.append(',');
+fw.append("Prod Qty");
+fw.append(',');
+fw.append("Total Price");
+fw.append(',');
+fw.append("Order Date");
+fw.append(',');
+fw.append("Customer ID");
+fw.append('\n');
 
 
- 
- 
- 
-
-
-// create a small spreadsheet
-HSSFWorkbook wb = new HSSFWorkbook();
-HSSFSheet sheet = wb.createSheet();
-
-
-// write it as an excel attachment
-ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
-wb.write(outByteStream);
-byte [] outArray = outByteStream.toByteArray();
-response.setContentType("application/ms-excel");
-response.setContentLength(outArray.length); 
-response.setHeader("Expires:", "0"); // eliminates browser caching
-response.setHeader("Content-Disposition", "attachment; filename=Leave Details.xls");
-OutputStream outStream = response.getOutputStream();
-outStream.write(outArray);
-outStream.flush();
-
+datasource connect = new datasource();
+conn = connect.datasource();
+String query = "Select * FROM orders";
+stmt = conn.createStatement();
+ResultSet rs = stmt.executeQuery(query);
+while(rs.next())
+{
+fw.append(rs.getString(1));
+fw.append(',');
+fw.append(rs.getString(2));
+fw.append(',');
+fw.append(rs.getString(3));
+fw.append(',');
+fw.append(rs.getString(4));
+fw.append(',');
+fw.append(rs.getString(5));
+fw.append('\n');
+}
+fw.flush();
+fw.close();
+conn.close();
+out.println("<b>You have Successfully Created Csv file.</b>");
+} catch (Exception e) {
+e.printStackTrace();
+}
 %>
+</body>
+</html>
